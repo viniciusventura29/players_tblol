@@ -1,9 +1,8 @@
 package main
 
 import (
-	"context"
-	"net/http"
 	"players_tblol/db"
+	"players_tblol/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,30 +21,13 @@ func main() {
 		}
 	}()
 
+	routes.AppRouter(app, client)
+
 	// createPost, err := client.Post.CreateOne(db.Post.Name.Set("Vinicius")).Exec(context.Background())
 
 	// if err != nil {
 	// 	return
 	// }
-
-	app.GET("/", func(c *gin.Context) {
-
-		posts, err := client.Post.FindMany().Exec(context.Background())
-
-		if err != nil {
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"message": posts,
-		})
-	})
-
-	app.GET("/oi/:id", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"message": ctx.Params.ByName("id"),
-		})
-	})
 
 	app.Run("localhost:3000")
 }
