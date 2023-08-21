@@ -23,7 +23,9 @@ func main() {
 
 	routes.AppRouter(app, client)
 
-	// createPost, err := client.Post.CreateOne(db.Post.Name.Set("Vinicius")).Exec(context.Background())
+	// createTeam, err := client.Team.CreateOne(db.Team.Name.Set("Loud")).Exec(context.Background())
+
+	// log.Printf("format", createTeam)
 
 	// if err != nil {
 	// 	return
