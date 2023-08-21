@@ -27,6 +27,6 @@ model Player {
 
 model Team {
   id     String   @id @default(cuid())
-  name   String
+  name   String   @unique
   player Player[]
 }
