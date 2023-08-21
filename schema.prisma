@@ -3,14 +3,30 @@ datasource db {
   provider = "sqlite"
   url      = "file:dev.db"
 }
- 
+
 generator db {
   provider = "go run github.com/steebchen/prisma-client-go"
 }
- 
-model Post {
-  id        String   @default(cuid()) @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name     String
+
+model Player {
+  id         String   @id @default(cuid())
+  nickname   String
+  image      String
+  country    String
+  points     String
+  lastPoints String
+  name       String
+  LastName   String
+  lane       String
+  laneImg    String
+  teamId     String
+  team       Team     @relation(references: [id], fields: [teamId])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Team {
+  id     String   @id @default(cuid())
+  name   String
+  player Player[]
 }
