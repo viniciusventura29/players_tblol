@@ -1,7 +1,10 @@
 package routes
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"players_tblol/db"
 
@@ -16,6 +19,10 @@ type Player struct {
 	LastName string `json:"lastName"`
 	Lane     string `json:"lane"`
 	TeamId   string `json:"teamId"`
+}
+
+type PlayerId struct {
+	PlayerId string `json:"playerid"`
 }
 
 func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
@@ -37,12 +44,12 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 			})
 		})
 
-		v1.POST("/addPlayer", func(c *gin.Context) {
+		v1.POST("/newPlayer", func(c *gin.Context) {
 
 			var playerInfo Player
 
 			if err := c.BindJSON(&playerInfo); err != nil {
-				c.String(http.StatusBadRequest, "sdfsdjnfj")
+				c.String(http.StatusBadRequest, "Bad request in BindJSON")
 				return
 			}
 
@@ -66,6 +73,29 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 			c.JSON(http.StatusOK, gin.H{
 				"Player ": player,
 			})
+
+		})
+
+		v1.POST("/addPlayer", func(ctx *gin.Context) {
+			var playerid PlayerId
+
+			if err := ctx.BindJSON(&playerid); err != nil {
+				ctx.String(http.StatusBadRequest, "Bad request saas")
+				return
+			}
+
+			postBody, err := json.Marshal(playerid)
+
+			if err != nil {
+				ctx.String(http.StatusBadRequest, "Bad N")
+				return
+			}
+
+			fmt.Println(bytes.NewBuffer(postBody))
+
+			resp, err := http.Post("http://localhost:4000/teste", "application/json", bytes.NewBuffer(postBody))
+
+			fmt.Printf("resp.Close: %v\n", resp.Close)
 
 		})
 	}
