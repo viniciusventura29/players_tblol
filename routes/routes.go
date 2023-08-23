@@ -52,6 +52,11 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 
 	v1 := Router.Group("/")
 	{
+
+		v1.GET("/", func(c *gin.Context) {
+			c.JSON(http.StatusOK, "Hello World")
+		})
+
 		v1.GET("/allPlayers", func(c *gin.Context) {
 
 			player, err := client.Player.FindMany().Exec(ctx)
