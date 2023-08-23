@@ -38,6 +38,9 @@ Params:
 Params:
      - name: string
 
+#### Get all teams
+"*/getAllTeams"
+
 #### to remove a player in your team
 "*/removePlayer"
 
