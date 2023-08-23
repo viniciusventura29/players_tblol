@@ -16,7 +16,7 @@ model Player {
   points     String
   lastPoints String
   name       String
-  LastName   String
+  lastName   String
   lane       String
   laneImg    String
   teamId     String

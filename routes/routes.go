@@ -74,6 +74,13 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 				return
 			}
 
+			_, err := client.Team.FindUnique(db.Team.ID.Equals(playerInfo.TeamId)).Exec(ctx)
+
+			if err != nil {
+				c.String(http.StatusBadRequest, err.Error())
+				return
+			}
+
 			player, err := client.Player.CreateOne(
 				db.Player.Nickname.Set(playerInfo.Nickname),
 				db.Player.Image.Set(""),
@@ -131,6 +138,26 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 
 		})
 
+		v1.POST("/removePlayer", func(c *gin.Context) {
+			var playerId PlayerId
+
+			if err := c.BindJSON(&playerId); err != nil {
+				c.String(http.StatusBadRequest, err.Error())
+				return
+			}
+
+			postBody, err := json.Marshal(playerId)
+
+			if err != nil {
+				c.String(http.StatusBadRequest, "Bad N")
+				return
+			}
+
+			resp, err := http.Post("http://localhost:4000/removePlayer", "application/json", bytes.NewBuffer(postBody))
+
+			c.JSON(resp.StatusCode, resp)
+		})
+
 		v1.GET("/getMyPlayers", func(c *gin.Context) {
 			resp, err := http.Get("http://localhost:4000/me")
 
@@ -159,8 +186,6 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 				return
 			}
 
-			fmt.Println(players)
-
 			c.JSON(http.StatusOK, players)
 		})
 
@@ -179,6 +204,18 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 			}
 
 			c.JSON(http.StatusOK, newTeam)
+
+		})
+
+		v1.GET("/getAllTeams", func(c *gin.Context) {
+			teams, err := client.Team.FindMany().Exec(ctx)
+
+			if err != nil {
+				c.String(http.StatusUnauthorized, err.Error())
+				return
+			}
+
+			c.JSON(http.StatusOK, teams)
 
 		})
 	}
