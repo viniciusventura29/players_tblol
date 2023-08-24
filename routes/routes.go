@@ -21,6 +21,7 @@ type Player struct {
 	LastName  string  `json:"lastName"`
 	Lane      string  `json:"lane"`
 	TeamId    string  `json:"teamId"`
+	Image    string  `json:"image"`
 }
 
 type PlayerId struct {
@@ -90,7 +91,7 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 
 			player, err := client.Player.CreateOne(
 				db.Player.NickName.Set(playerInfo.Nickname),
-				db.Player.Image.Set(""),
+				db.Player.Image.Set(playerInfo.image),
 				db.Player.Country.Set(playerInfo.Country),
 				db.Player.Score.Set(float64(playerInfo.Score)),
 				db.Player.ScoreHistory.Set(70),
