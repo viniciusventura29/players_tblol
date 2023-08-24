@@ -14,13 +14,13 @@ import (
 )
 
 type Player struct {
-	Nickname string `json:"nickname"`
-	Country  string `json:"country"`
-	Points   string `json:"points"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
-	Lane     string `json:"lane"`
-	TeamId   string `json:"teamId"`
+	Nickname  string  `json:"nickName"`
+	Country   string  `json:"country"`
+	Score     float32 `json:"score"`
+	FirstName string  `json:"firstName"`
+	LastName  string  `json:"lastName"`
+	Lane      string  `json:"lane"`
+	TeamId    string  `json:"teamId"`
 }
 
 type PlayerId struct {
@@ -43,7 +43,9 @@ type User struct {
 }
 
 type Team struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
+	NickName string `json:"nickName"`
+	Image    string `json:"image"`
 }
 
 func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
@@ -87,12 +89,12 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 			}
 
 			player, err := client.Player.CreateOne(
-				db.Player.Nickname.Set(playerInfo.Nickname),
+				db.Player.NickName.Set(playerInfo.Nickname),
 				db.Player.Image.Set(""),
 				db.Player.Country.Set(playerInfo.Country),
-				db.Player.Points.Set(playerInfo.Points),
-				db.Player.LastPoints.Set("70"),
-				db.Player.Name.Set(playerInfo.Name),
+				db.Player.Score.Set(float64(playerInfo.Score)),
+				db.Player.ScoreHistory.Set(70),
+				db.Player.FirstName.Set(playerInfo.FirstName),
 				db.Player.LastName.Set(playerInfo.LastName),
 				db.Player.Lane.Set(playerInfo.Lane),
 				db.Player.LaneImg.Set(""),
@@ -202,7 +204,7 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 				return
 			}
 
-			newTeam, err := client.Team.CreateOne(db.Team.Name.Set(team.Name)).Exec(ctx)
+			newTeam, err := client.Team.CreateOne(db.Team.Name.Set(team.Name), db.Team.NickName.Set(team.NickName), db.Team.Image.Set(team.Image)).Exec(ctx)
 
 			if err != nil {
 				return
