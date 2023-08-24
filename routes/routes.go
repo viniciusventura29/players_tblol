@@ -133,7 +133,7 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 				return
 			}
 
-			resp, err := http.Post("http://localhost:4000/addPlayer", "application/json", bytes.NewBuffer(postBody))
+			resp, err := http.Post("https://tblol-auth.onrender.com/addPlayer", "application/json", bytes.NewBuffer(postBody))
 
 			fmt.Printf("resp.Close: %v\n", resp.Close)
 
@@ -158,13 +158,13 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 				return
 			}
 
-			resp, err := http.Post("http://localhost:4000/removePlayer", "application/json", bytes.NewBuffer(postBody))
+			resp, err := http.Post("https://tblol-auth.onrender.com/removePlayer", "application/json", bytes.NewBuffer(postBody))
 
 			c.JSON(resp.StatusCode, resp)
 		})
 
 		v1.GET("/getMyPlayers", func(c *gin.Context) {
-			resp, err := http.Get("http://localhost:4000/me")
+			resp, err := http.Get("https://tblol-auth.onrender.com/me")
 
 			if err != nil {
 				c.String(http.StatusInternalServerError, err.Error())
