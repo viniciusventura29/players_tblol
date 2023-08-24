@@ -10,12 +10,12 @@ generator db {
 
 model Player {
   id         String   @id @default(cuid())
-  nickname   String
+  nickName   String
   image      String
   country    String
-  points     String
-  lastPoints String
-  name       String
+  score     Float
+  scoreHistory Float
+  firstName       String
   lastName   String
   lane       String
   laneImg    String
@@ -28,5 +28,7 @@ model Player {
 model Team {
   id     String   @id @default(cuid())
   name   String   @unique
+  nickName String
+  image String
   player Player[]
 }
