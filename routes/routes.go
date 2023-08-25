@@ -91,7 +91,7 @@ func AppRouter(Router *gin.Engine, client *db.PrismaClient) *gin.RouterGroup {
 
 			player, err := client.Player.CreateOne(
 				db.Player.NickName.Set(playerInfo.Nickname),
-				db.Player.Image.Set(playerInfo.image),
+				db.Player.Image.Set(playerInfo.Image),
 				db.Player.Country.Set(playerInfo.Country),
 				db.Player.Score.Set(float64(playerInfo.Score)),
 				db.Player.ScoreHistory.Set(70),
